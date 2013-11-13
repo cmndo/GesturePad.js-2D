@@ -33,15 +33,20 @@
  * 	Please, keep this header and the list of all authors
  *	
  * 
- * 	Point Class from: http://upshots.org/javascript/javascript-point-class
- * 
- *	$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
- * 	Aaron Sherrill
+ *	MODIFICATION + JavaScript PORT *******************************************************
+ * 	
+ *	Aaron Sherrill
  * 	Digital Surgeons, LLC
- * 	Javascript Port for use in Titanium
- * 	$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+ * 	Javascript Port for use all over the web.
+ * 	
  */
+function Point(x, y){
+    this.x = x || 0;
+    this.y = y || 0;
+};
 
+Point.prototype.x = null;
+Point.prototype.y = null;
 
 function ExternalGesture() {
 	var _events = {};
@@ -83,11 +88,9 @@ function ExternalGesture() {
 
 	var DEFAULT_NB_SECTORS = 8;
 	// Number of sectors
-	var DEFAULT_TIME_STEP = 20;
-	// Capture interval in ms
 	var DEFAULT_PRECISION = 8;
 	// Precision of catpure in pixels
-	var DEFAULT_FIABILITY = 30;
+	var DEFAULT_FIABILITY = 10;
 	// Default fiability level
 
 	// ------------------------------------------------
@@ -114,14 +117,13 @@ function ExternalGesture() {
 	// Current capture depth
 	var gestures;
 	// Gestures to match
-	var rect;
-	// Rectangle zone
+	
 	var points;
 	// Mouse points
-	var timer;
-	// Timer
+
 	var sectorRad;
 	// Angle of one sector
+
 	var anglesMap;
 	// Angles map
 
@@ -145,6 +147,15 @@ function ExternalGesture() {
 			match : matchHandler
 		});
 	}
+	/**
+	 *	Add lots of gesture
+	 */
+	this.addGestures = function(obj) {
+		for(var i = 0; i < obj.length; i++){
+			this.addGesture(obj[i].name, obj[i].code);
+		}
+	}
+
 	// ------------------------------------------------
 	//
 	// ---o private methods
@@ -193,7 +204,7 @@ function ExternalGesture() {
 		moves = [];
 		points = [];
 		
-		// last point
+		// First point
 		lastPoint = new Point(ps[0].x, ps[0].y);
 
 		for(var k = 1; k < ps.length; k++) {
@@ -203,8 +214,10 @@ function ExternalGesture() {
 
 			var difx = msx - lastPoint.x;
 			var dify = msy - lastPoint.y;
+			
 			var sqDist = difx * difx + dify * dify;
 			var sqPrec = DEFAULT_PRECISION * DEFAULT_PRECISION;
+
 
 			if(sqDist > sqPrec) {
 				points.push(new Point(msx, msy));
@@ -215,7 +228,6 @@ function ExternalGesture() {
 			}
 
 		}
-		Ti.API.info(moves.length);
 
 		// match
 		matchGesture();
@@ -225,8 +237,11 @@ function ExternalGesture() {
 	 */
 	function addMove(dx, dy) {
 		var angle = Math.atan2(dy, dx) + sectorRad / 2;
-		if(angle < 0)
+		
+		if(angle < 0) {
 			angle += Math.PI * 2;
+		}
+		
 		var no = Math.floor(angle / (Math.PI * 2) * 100);
 		
 		//limit the number of duplicate angles that make up the move.

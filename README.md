@@ -3,9 +3,7 @@
 I first ported this from ActionScript to JavaScript for use in an Appcelerator Titanium iPhone Application but used their custom touch api. I'm in the process of refactoring it to work in the browser and on the mobile web.
 
 ## What needs done ##
-ui.js has Titanium specific ui elements and events. Those need to be converted to vanilla JS.
-
-ExternalGesture.js has some good stuff inside that needs to be moved around and optimized.
+Nothing. Use it.
 
 Examples need made
 
